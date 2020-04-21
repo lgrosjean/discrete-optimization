@@ -5,44 +5,34 @@ from collections import namedtuple
 Item = namedtuple("Item", ['index', 'value', 'weight'])
 
 from utils import parse_input, parse_output
+from functions import solver_example, solver_dp
+from tree import solver_depth_first_branch
+import time
 
 def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
-
+    # Read the inputs
     inputs = parse_input(input_data)
     capacity = inputs.capacity
     items = inputs.items
 
-    # parse the input
-    # lines = input_data.split('\n')
+    # Solver Example
+    #value, taken = solver_example(capacity, items)
 
-    # firstLine = lines[0].split()
-    # item_count = int(firstLine[0])
-    # capacity = int(firstLine[1])
+    # Solver DP
+    print("Capacity:", capacity, " | N:" ,len(items))
+    start = time.time()
+    if capacity*len(items) <  10000*10000:
+        print("Solver DP")
+        value, taken = solver_dp(capacity, items)
+    else:
+        print("Solver Tree")
+        value, taken = solver_depth_first_branch(capacity, items)
 
-    # items = []
+    end = time.time()
+    print("Time:", end-start)
 
-    # for i in range(1, item_count+1):
-    #     line = lines[i]
-    #     parts = line.split()
-    #     items.append(Item(i-1, int(parts[0]), int(parts[1])))
-
-    # a trivial algorithm for filling the knapsack
-    # it takes items in-order until the knapsack is full
-    value = 0
-    weight = 0
-    taken = [0]*len(items)
-
-    for item in items:
-        if weight + item.weight <= capacity:
-            taken[item.index] = 1
-            value += item.value
-            weight += item.weight
-
+    # Parse outputs
     output_data = parse_output(value, taken)
-    # prepare the solution in the specified output format
-    # output_data = str(value) + ' ' + str(0) + '\n'
-    # output_data += ' '.join(map(str, taken))
     return output_data
 
 
